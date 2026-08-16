@@ -418,7 +418,20 @@ app.put('/api/admin/verify-creator/:id', authenticateToken, requireRole('admin')
   res.json({ message: 'Creator verified successfully', user });
 });
 
+// Serve Frontend Static Files in Production (Render / Cloud Deployment)
+const fs = require('fs');
+const frontendDistPath = path.join(__dirname, '../frontend/dist');
+if (fs.existsSync(frontendDistPath)) {
+  app.use(express.static(frontendDistPath));
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
+      res.sendFile(path.join(frontendDistPath, 'index.html'));
+    }
+  });
+}
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`🚀 SamsView Backend API running on http://localhost:${PORT}`);
 });
+
