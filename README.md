@@ -1,6 +1,6 @@
 # 🎬 CreatorHub - Full-Stack Freelance Platform for Content Creators
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-creatorhub--platform.onrender.com-brightgreen?style=for-the-badge&logo=render)](https://creatorhub-platform.onrender.com)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-creatorhub--platform--lgxq.onrender.com-brightgreen?style=for-the-badge&logo=render)](https://creatorhub-platform-lgxq.onrender.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-v18%2B-green.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-v18.3-61dafb.svg)](https://reactjs.org/)
@@ -13,8 +13,8 @@
 
 ## 🌐 Live Web App Deployment (Render)
 
-👉 **[Click Here to Launch Live CreatorHub Web App](https://creatorhub-platform.onrender.com)**  
-*URL: https://creatorhub-platform.onrender.com*
+👉 **[Click Here to Launch Live CreatorHub Web App](https://creatorhub-platform-lgxq.onrender.com)**  
+*URL: https://creatorhub-platform-lgxq.onrender.com*
 
 ---
 
