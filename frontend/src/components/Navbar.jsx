@@ -13,22 +13,25 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0d111c]/95 backdrop-blur-md border-b border-[#282f40] px-4 lg:px-8 py-3 transition-all">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 lg:px-8 py-3 transition-all shadow-sm">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
-        {/* Clean Typographic CreatorHub Logo - RED SQUARE "A" ICON REMOVED */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="text-2xl font-extrabold tracking-tight text-white group-hover:text-[#1473E6] transition-colors">
+        {/* Clean Typographic CreatorHub Logo */}
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <span className="text-2xl font-extrabold tracking-tight text-slate-900 group-hover:text-[#1473E6] transition-colors">
             Creator<span className="text-[#1473E6]">Hub</span>
+          </span>
+          <span className="hidden sm:inline-block text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
+            Adobe Studio UI
           </span>
         </Link>
 
-        {/* Center Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 bg-[#151924] px-3 py-1 rounded-xl border border-[#282f40]">
+        {/* Center Navigation Links (Adobe Light Theme) */}
+        <nav className="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
           <Link
             to="/"
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-              isActive('/') ? 'bg-[#1473E6] text-white shadow-sm' : 'text-slate-300 hover:text-white hover:bg-[#1c2232]'
+              isActive('/') ? 'bg-[#1473E6] text-white shadow-sm' : 'text-slate-700 hover:text-slate-900 hover:bg-white'
             }`}
           >
             Home
@@ -36,26 +39,26 @@ export default function Navbar() {
           <Link
             to="/search"
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
-              isActive('/search') ? 'bg-[#1473E6] text-white shadow-sm' : 'text-slate-300 hover:text-white hover:bg-[#1c2232]'
+              isActive('/search') ? 'bg-[#1473E6] text-white shadow-sm' : 'text-slate-700 hover:text-slate-900 hover:bg-white'
             }`}
           >
-            <MapPin className="w-3.5 h-3.5 text-cyan-400" /> Find Creators
+            <MapPin className="w-3.5 h-3.5 text-cyan-600" /> Find Creators
           </Link>
           <Link
             to="/jobs"
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
-              isActive('/jobs') ? 'bg-[#1473E6] text-white shadow-sm' : 'text-slate-300 hover:text-white hover:bg-[#1c2232]'
+              isActive('/jobs') ? 'bg-[#1473E6] text-white shadow-sm' : 'text-slate-700 hover:text-slate-900 hover:bg-white'
             }`}
           >
-            <Briefcase className="w-3.5 h-3.5 text-amber-400" /> Job Board
+            <Briefcase className="w-3.5 h-3.5 text-amber-600" /> Job Board
           </Link>
           <Link
             to="/tools"
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
-              isActive('/tools') ? 'bg-[#1473E6] text-white shadow-sm' : 'text-slate-300 hover:text-white hover:bg-[#1c2232]'
+              isActive('/tools') ? 'bg-[#1473E6] text-white shadow-sm' : 'text-slate-700 hover:text-slate-900 hover:bg-white'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-pink-400" /> Creator Tools
+            <Sparkles className="w-3.5 h-3.5 text-pink-600" /> Creator Tools
           </Link>
         </nav>
 
@@ -63,19 +66,19 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           
           {/* Currency Switcher */}
-          <div className="flex items-center gap-1 bg-[#151924] border border-[#282f40] px-2.5 py-1.5 rounded-xl text-xs">
+          <div className="flex items-center gap-1 bg-slate-100 border border-slate-200 px-2.5 py-1.5 rounded-xl text-xs">
             <Globe className="w-3.5 h-3.5 text-[#1473E6]" />
             <select
               value={selectedCurrency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer"
+              className="bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer"
             >
-              <option value="USD" className="bg-[#151924] text-white">USD ($)</option>
-              <option value="EUR" className="bg-[#151924] text-white">EUR (€)</option>
-              <option value="GBP" className="bg-[#151924] text-white">GBP (£)</option>
-              <option value="INR" className="bg-[#151924] text-white">INR (₹)</option>
-              <option value="AUD" className="bg-[#151924] text-white">AUD (A$)</option>
-              <option value="JPY" className="bg-[#151924] text-white">JPY (¥)</option>
+              <option value="USD" className="bg-white text-slate-900">USD ($)</option>
+              <option value="EUR" className="bg-white text-slate-900">EUR (€)</option>
+              <option value="GBP" className="bg-white text-slate-900">GBP (£)</option>
+              <option value="INR" className="bg-white text-slate-900">INR (₹)</option>
+              <option value="AUD" className="bg-white text-slate-900">AUD (A$)</option>
+              <option value="JPY" className="bg-white text-slate-900">JPY (¥)</option>
             </select>
           </div>
 
@@ -84,7 +87,7 @@ export default function Navbar() {
               {user.role === 'creator' && (
                 <Link
                   to="/creator-dashboard"
-                  className="px-3 py-1.5 rounded-xl bg-[#151924] border border-[#282f40] text-[#1473E6] text-xs font-bold hover:bg-[#1c2232] transition-all flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-[#1473E6] text-xs font-bold hover:bg-slate-200 transition-all flex items-center gap-1.5"
                 >
                   <FileText className="w-3.5 h-3.5" /> Dashboard & Resume
                 </Link>
@@ -92,7 +95,7 @@ export default function Navbar() {
               {user.role === 'client' && (
                 <Link
                   to="/client-dashboard"
-                  className="px-3 py-1.5 rounded-xl bg-[#151924] border border-[#282f40] text-purple-400 text-xs font-bold hover:bg-[#1c2232] transition-all flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-purple-600 text-xs font-bold hover:bg-slate-200 transition-all flex items-center gap-1.5"
                 >
                   <PlusCircle className="w-3.5 h-3.5" /> Post Job
                 </Link>
@@ -100,26 +103,26 @@ export default function Navbar() {
               {user.role === 'admin' && (
                 <Link
                   to="/admin"
-                  className="px-3 py-1.5 rounded-xl bg-rose-950/60 border border-rose-800 text-rose-300 text-xs font-bold hover:bg-rose-900 transition-all flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold hover:bg-rose-100 transition-all flex items-center gap-1.5"
                 >
                   <ShieldAlert className="w-3.5 h-3.5" /> Admin Panel
                 </Link>
               )}
 
-              <div className="flex items-center gap-2 pl-2 border-l border-[#282f40]">
+              <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
                 <img
                   src={user.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"}
                   alt={user.name}
                   className="w-8 h-8 rounded-full object-cover ring-2 ring-[#1473E6]"
                 />
                 <div className="hidden lg:block text-left">
-                  <div className="text-xs font-bold text-white">{user.name}</div>
-                  <div className="text-[10px] text-slate-400 capitalize">{user.role}</div>
+                  <div className="text-xs font-bold text-slate-900">{user.name}</div>
+                  <div className="text-[10px] text-slate-500 capitalize">{user.role}</div>
                 </div>
                 <button
                   onClick={() => { logout(); navigate('/'); }}
                   title="Log out"
-                  className="p-1.5 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-[#1c2232] transition-all"
+                  className="p-1.5 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-slate-100 transition-all"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -129,7 +132,7 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               <Link
                 to="/login"
-                className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-[#1c2232] transition-all"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-all"
               >
                 Sign In
               </Link>

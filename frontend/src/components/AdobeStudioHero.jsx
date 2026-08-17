@@ -16,77 +16,76 @@ export default function AdobeStudioHero({ onOpenAIRecommend }) {
   };
 
   return (
-    <section className="relative min-h-[85vh] flex items-center bg-[#0b0f19] overflow-hidden">
+    <section className="relative min-h-[80vh] flex items-center bg-slate-50 overflow-hidden border-b border-slate-200">
       
-      {/* 1. Cinematic Creator Studio Desk Background Image */}
+      {/* 1. Cinematic Creator Studio Desk Background Image (Light Overlay) */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
         style={{
           backgroundImage: `url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=2000&q=80')`
         }}
       >
-        {/* Dark Vignette Overlay for Crisp White Text Legibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/90 to-transparent z-0" />
-        <div className="absolute inset-0 bg-black/40 z-0" />
+        {/* Soft Light Overlay for High Text Legibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/40 z-0" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* 2. Left-Aligned Typography */}
+          {/* 2. Left-Aligned Light Typography */}
           <div className="lg:col-span-6 space-y-6 text-left">
             
-            {/* Small Category Label */}
-            <div className="text-xs uppercase font-extrabold tracking-widest text-[#1473E6] flex items-center gap-2">
+            {/* Small Category Tag */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#1473E6] animate-ping" />
-              <span>CreatorHub Studio</span>
+              <span>CreatorHub Studio • Adobe Light Theme</span>
             </div>
 
-            {/* Massive Headline */}
-            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.08]">
+            {/* Massive Light Headline */}
+            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.08]">
               All the best creators, <br />
-              <span className="gradient-text-blue">all in one place.</span>
+              <span className="gradient-text-adobe-light">all in one place.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-200 font-normal leading-relaxed max-w-xl">
-              Hire and collaborate with top video editors, audio engineers, motion graphic artists, and FPV drone pilots.
+            <p className="text-base sm:text-lg text-slate-700 font-normal leading-relaxed max-w-xl">
+              Hire and collaborate with top video editors, audio engineers, motion graphic artists, and FPV drone pilots worldwide.
             </p>
 
-            {/* Secondary Promo Copy */}
-            <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-lg leading-relaxed border-l-2 border-[#1473E6] pl-3 py-1 bg-slate-950/60 rounded-r-lg">
-              Get instant multi-currency conversion, automated legal contracts, and RAG AI creator recommendations.
+            {/* Secondary Copy */}
+            <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-lg leading-relaxed border-l-2 border-[#1473E6] pl-3 py-1 bg-white/80 rounded-r-lg border border-slate-200">
+              Get instant multi-currency conversion ($, €, £, ₹, A$, ¥), automated legal contracts, and RAG AI creator recommendations.
             </p>
 
-            {/* White Pill & Adobe Blue Action Buttons */}
+            {/* Action Buttons */}
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link
                 to="/search"
-                className="px-8 py-3.5 bg-white hover:bg-slate-100 text-slate-950 font-extrabold text-sm rounded-full shadow-2xl transition-transform hover:scale-105 inline-flex items-center gap-2"
+                className="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-sm rounded-full shadow-lg transition-transform hover:scale-105 inline-flex items-center gap-2"
               >
                 <span>Explore Creators</span>
-                <ArrowRight className="w-4 h-4 text-slate-900" />
+                <ArrowRight className="w-4 h-4 text-white" />
               </Link>
 
               <button
                 onClick={onOpenAIRecommend}
-                className="px-6 py-3.5 bg-[#1473E6] hover:bg-[#0D66D0] text-white font-extrabold text-xs rounded-full shadow-xl inline-flex items-center gap-2"
+                className="px-6 py-3.5 bg-[#1473E6] hover:bg-[#0D66D0] text-white font-extrabold text-xs rounded-full shadow-md transition-all inline-flex items-center gap-2"
               >
-                <Bot className="w-4 h-4 text-pink-300" />
+                <Bot className="w-4 h-4 text-pink-200" />
                 <span>RAG AI Matcher</span>
               </button>
             </div>
 
             {/* Search Bar */}
             <form onSubmit={handleSearchSubmit} className="max-w-md pt-2">
-              <div className="p-1.5 bg-slate-950/90 border border-slate-700/80 rounded-2xl shadow-xl flex items-center gap-2 backdrop-blur-md">
+              <div className="p-1.5 bg-white border border-slate-300 rounded-2xl shadow-md flex items-center gap-2">
                 <Search className="w-4 h-4 text-[#1473E6] ml-3" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search Premiere Pro, London, FPV..."
-                  className="flex-1 bg-transparent text-xs text-white placeholder-slate-400 focus:outline-none"
+                  className="flex-1 bg-transparent text-xs text-slate-900 placeholder-slate-400 focus:outline-none"
                 />
                 <button
                   type="submit"
@@ -99,25 +98,25 @@ export default function AdobeStudioHero({ onOpenAIRecommend }) {
 
           </div>
 
-          {/* 3. Right Side: Interactive Laptop Display Showcase */}
+          {/* 3. Right Side: Laptop Showcase Frame */}
           <div className="lg:col-span-6 relative">
             
             {/* Laptop Frame Shell */}
             <div className="relative rounded-2xl bg-slate-900 border-4 border-slate-700 shadow-2xl p-2 sm:p-3 overflow-hidden transform lg:rotate-1 hover:rotate-0 transition-transform duration-500">
               
               {/* Laptop Screen Header */}
-              <div className="bg-[#181818] rounded-t-xl p-3 border-b border-slate-800 flex items-center justify-between">
+              <div className="bg-slate-800 rounded-t-xl p-3 border-b border-slate-700 flex items-center justify-between">
                 <div className="flex items-center gap-2 text-xs font-bold text-white">
                   <span>CreatorHub Studio App</span>
                 </div>
                 
                 {/* AI Model Selector Dropdown */}
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-slate-400 font-mono">Model:</span>
+                  <span className="text-[10px] text-slate-300 font-mono">Model:</span>
                   <select
                     value={selectedModel}
                     onChange={(e) => setSelectedModel(e.target.value)}
-                    className="bg-[#262626] border border-[#3a3a3a] text-xs font-bold text-white rounded px-2 py-1 focus:outline-none"
+                    className="bg-slate-900 border border-slate-700 text-xs font-bold text-white rounded px-2 py-1 focus:outline-none"
                   >
                     <option value="CreatorHub RAG v2.4">CreatorHub RAG v2.4</option>
                     <option value="Adobe Firefly Video">Adobe Firefly Video</option>
@@ -127,7 +126,7 @@ export default function AdobeStudioHero({ onOpenAIRecommend }) {
               </div>
 
               {/* Laptop Screen App Content */}
-              <div className="bg-[#121622] p-4 space-y-4 rounded-b-xl">
+              <div className="bg-slate-950 p-4 space-y-4 rounded-b-xl">
                 
                 {/* Top Prompt Display Bar */}
                 <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
@@ -143,7 +142,7 @@ export default function AdobeStudioHero({ onOpenAIRecommend }) {
                 {/* Creator Gallery Grid Inside Laptop */}
                 <div className="grid grid-cols-2 gap-3">
                   
-                  <div className="p-3 rounded-xl bg-[#1c2232] border border-slate-700/80 space-y-2">
+                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
                     <div className="flex items-center gap-2">
                       <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Alex" className="w-8 h-8 rounded-lg object-cover ring-2 ring-[#1473E6]" />
                       <div>
@@ -157,7 +156,7 @@ export default function AdobeStudioHero({ onOpenAIRecommend }) {
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-[#1c2232] border border-slate-700/80 space-y-2">
+                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
                     <div className="flex items-center gap-2">
                       <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" alt="Daniel" className="w-8 h-8 rounded-lg object-cover ring-2 ring-[#1473E6]" />
                       <div>
