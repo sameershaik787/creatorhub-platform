@@ -31,21 +31,19 @@ export default function AdobeStudioHero({ onOpenAIRecommend }) {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* Left-Aligned Headline */}
+          {/* Left-Aligned Solid Typography (NO GRADIENTS) */}
           <div className="lg:col-span-6 space-y-6 text-left">
             
             {/* Tag */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold text-slate-200 shadow-lg backdrop-blur-md">
-              <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+              <MapPin className="w-3.5 h-3.5 text-[#1473E6]" />
               <span>India Regional Directory • Mumbai, Bengaluru, Delhi & Hyderabad</span>
             </div>
 
-            {/* Main Headline */}
+            {/* Main Solid Headline */}
             <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.08]">
               All the best creators, <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1473E6] via-purple-400 to-pink-400">
-                all in one place.
-              </span>
+              <span className="text-[#1473E6]">all in one place.</span>
             </h1>
 
             {/* Subtitle */}
@@ -72,7 +70,7 @@ export default function AdobeStudioHero({ onOpenAIRecommend }) {
                 onClick={onOpenAIRecommend}
                 className="px-6 py-3.5 bg-[#1473E6] hover:bg-[#0D66D0] text-white font-extrabold text-xs rounded-full shadow-lg transition-all inline-flex items-center gap-2"
               >
-                <Bot className="w-4 h-4 text-pink-200" />
+                <Bot className="w-4 h-4 text-white" />
                 <span>RAG AI Matcher</span>
               </button>
             </div>
@@ -145,7 +143,7 @@ export default function AdobeStudioHero({ onOpenAIRecommend }) {
                       </div>
                     </div>
                     <div className="h-16 rounded-lg bg-black overflow-hidden relative">
-                      <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300&q=80" className="w-full h-full object-cover" />
+                      <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80" className="w-full h-full object-cover" />
                       <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/80 text-[8px] font-bold text-emerald-400">₹3,500/hr</span>
                     </div>
                   </div>
@@ -159,7 +157,7 @@ export default function AdobeStudioHero({ onOpenAIRecommend }) {
                       </div>
                     </div>
                     <div className="h-16 rounded-lg bg-black overflow-hidden relative">
-                      <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=300&q=80" className="w-full h-full object-cover" />
+                      <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" className="w-full h-full object-cover" />
                       <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/80 text-[8px] font-bold text-emerald-400">₹2,800/hr</span>
                     </div>
                   </div>
