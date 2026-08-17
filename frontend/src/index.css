@@ -4,55 +4,66 @@
 
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #ffffff;
-    color: #0f172a;
+    font-family: 'Macan', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #FFFFFF;
+    color: #222325;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Macan', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #222325;
   }
 }
 
-/* Official Adobe Theme Tokens (Solid High-Contrast Colors, No Gradients) */
-.adobe-light-bg {
-  background-color: #ffffff;
+/* Fiverr Design Tokens */
+.fiverr-green-bg {
+  background-color: #1DBF73;
 }
 
-.adobe-light-surface {
-  background-color: #f8fafc;
+.fiverr-green-text {
+  color: #1DBF73;
 }
 
-.adobe-light-panel {
-  background-color: #f1f5f9;
-  border: 1px solid #e2e8f0;
+.fiverr-dark-bg {
+  background-color: #0a4226;
 }
 
-.adobe-light-card {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+.fiverr-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E4E5E7;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease-in-out;
 }
 
-.adobe-light-card:hover {
-  border-color: #1473E6;
-  box-shadow: 0 12px 28px rgba(20, 115, 230, 0.12);
+.fiverr-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
 }
 
-.adobe-btn-blue {
-  background-color: #1473E6;
-  color: #ffffff;
+.fiverr-btn-green {
+  background-color: #1DBF73;
+  color: #FFFFFF;
+  font-weight: 700;
+  border-radius: 4px;
   transition: all 0.2s ease;
 }
 
-.adobe-btn-blue:hover {
-  background-color: #0D66D0;
-  box-shadow: 0 4px 14px rgba(20, 115, 230, 0.3);
+.fiverr-btn-green:hover {
+  background-color: #19a463;
+  box-shadow: 0 4px 12px rgba(29, 191, 115, 0.3);
 }
 
-.text-adobe-blue {
-  color: #1473E6;
+.fiverr-input {
+  background-color: #FFFFFF;
+  border: 1px solid #C5C7D0;
+  color: #222325;
+  border-radius: 4px;
+}
+
+.fiverr-input:focus {
+  border-color: #1DBF73;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(29, 191, 115, 0.2);
 }
 
 /* Custom Scrollbar */
@@ -61,12 +72,12 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f8fafc;
+  background: #F7F7F7;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #C5C7D0;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #1473E6;
+  background: #1DBF73;
 }

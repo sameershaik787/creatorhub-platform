@@ -4,7 +4,7 @@ import LocationMap from '../components/LocationMap';
 import ResumeViewer from '../components/ResumeViewer';
 import ChatDrawer from '../components/ChatDrawer';
 import { useCurrency } from '../context/CurrencyContext';
-import { Search, MapPin, Star, Filter, CheckCircle2, MessageSquare, FileText, Globe, Layers, SlidersHorizontal } from 'lucide-react';
+import { Search, MapPin, Star, Filter, CheckCircle2, MessageSquare, FileText, Globe, Layers, SlidersHorizontal, Heart } from 'lucide-react';
 
 export default function SearchCreators() {
   const [searchParams] = useSearchParams();
@@ -46,117 +46,90 @@ export default function SearchCreators() {
       .finally(() => setLoading(false));
   };
 
-  const getRegionFlag = (loc) => {
-    if (!loc) return '🌐';
-    if (loc.includes('USA')) return '🇺🇸';
-    if (loc.includes('UK') || loc.includes('London')) return '🇬🇧';
-    if (loc.includes('Iceland')) return '🇮🇸';
-    if (loc.includes('India') || loc.includes('Mumbai') || loc.includes('Bengaluru')) return '🇮🇳';
-    if (loc.includes('Australia') || loc.includes('Sydney')) return '🇦🇺';
-    if (loc.includes('Japan') || loc.includes('Tokyo')) return '🇯🇵';
-    if (loc.includes('Germany') || loc.includes('Berlin')) return '🇩🇪';
-    return '🌐';
-  };
-
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+    <div className="min-h-screen bg-[#FFFFFF] text-[#222325] font-sans">
       
-      {/* 🖼️ STUDIO WORKSTATION LIGHT HERO SECTION */}
-      <section className="relative py-12 px-4 sm:px-6 lg:px-8 border-b border-slate-200 overflow-hidden bg-white">
-        
-        {/* Full-width Studio Workstation Image Background */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1542744094-3a317272018a?auto=format&fit=crop&w=2000&q=80')`
-          }}
-        >
-          {/* Light Vignette Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/90 to-slate-50 z-0" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto space-y-6">
+      {/* 🖼️ FIVERR SERVICES HEADER */}
+      <section className="bg-[#F7F7F7] border-b border-[#E4E5E7] py-8 px-4 lg:px-10">
+        <div className="max-w-7xl mx-auto space-y-6">
           
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 mb-2">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-[#1473E6]" />
-                <span>CreatorHub Studio Directory</span>
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900">Find & Hire Regional Content Creators</h1>
-              <p className="text-xs text-slate-600 mt-1 max-w-2xl">Discover verified cinematographers, B-roll editors, FPV drone pilots, and sound engineers by country, city, and rate.</p>
+              <div className="text-xs font-bold text-[#1DBF73] uppercase tracking-wider">India Marketplace Directory</div>
+              <h1 className="text-3xl font-extrabold text-[#222325] mt-1">Hire Top Indian Creative Services</h1>
+              <p className="text-xs text-[#74767E] mt-1 max-w-2xl">Verified cinematographers, DaVinci colorists, FPV drone pilots, and audio engineers across Mumbai, Bengaluru, Delhi & Hyderabad.</p>
             </div>
 
-            <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-sm">
+            <div className="flex items-center gap-1 bg-white p-1 rounded border border-[#E4E5E7] shadow-sm">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  viewMode === 'grid' ? 'bg-[#1473E6] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                className={`px-4 py-2 rounded text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  viewMode === 'grid' ? 'bg-[#1DBF73] text-white shadow-sm' : 'text-[#74767E] hover:text-[#222325]'
                 }`}
               >
-                <Layers className="w-4 h-4" /> Grid View
+                <Layers className="w-4 h-4" /> Gig Directory
               </button>
               <button
                 onClick={() => setViewMode('map')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  viewMode === 'map' ? 'bg-[#1473E6] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                className={`px-4 py-2 rounded text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  viewMode === 'map' ? 'bg-[#1DBF73] text-white shadow-sm' : 'text-[#74767E] hover:text-[#222325]'
                 }`}
               >
-                <Globe className="w-4 h-4 text-cyan-600" /> Interactive Map View
+                <Globe className="w-4 h-4" /> Interactive Map View
               </button>
             </div>
           </div>
 
-          {/* 🛠️ FILTER TOOLBAR (ADOBE LIGHT THEME) */}
-          <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-lg space-y-4">
-            <form onSubmit={(e) => { e.preventDefault(); fetchCreators(); }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 items-center">
+          {/* 🛠️ FILTER TOOLBAR */}
+          <div className="p-4 rounded-lg bg-white border border-[#E4E5E7] shadow-sm">
+            <form onSubmit={(e) => { e.preventDefault(); fetchCreators(); }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-center">
               
               {/* Keyword Search */}
               <div className="relative">
-                <Search className="w-4 h-4 text-[#1473E6] absolute left-3.5 top-3" />
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                 <input
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search keyword or name..."
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#1473E6] focus:ring-1 focus:ring-[#1473E6] transition-all"
+                  className="w-full pl-10 pr-3 py-2 rounded border border-[#C5C7D0] text-xs font-semibold text-[#222325] placeholder-slate-400 focus:outline-none focus:border-[#1DBF73]"
                 />
               </div>
 
-              {/* Skill Discipline Dropdown */}
+              {/* Skill Category */}
               <div className="relative">
                 <select
                   value={skill}
                   onChange={(e) => setSkill(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#1473E6] focus:ring-1 focus:ring-[#1473E6] cursor-pointer appearance-none transition-all"
+                  className="w-full px-3 py-2 rounded border border-[#C5C7D0] text-xs font-bold text-[#222325] focus:outline-none focus:border-[#1DBF73] cursor-pointer appearance-none bg-white"
                 >
-                  <option value="All" className="bg-white text-slate-900 font-semibold">All Disciplines</option>
-                  <option value="Video Editing" className="bg-white text-slate-900 font-semibold">Video Editing & Cinematography</option>
-                  <option value="Audio Editing" className="bg-white text-slate-900 font-semibold">Audio & Podcast</option>
-                  <option value="Motion Graphics" className="bg-white text-slate-900 font-semibold">Motion Graphics & 3D</option>
-                  <option value="Drone Videography" className="bg-white text-slate-900 font-semibold">Drone & FPV Flying</option>
-                  <option value="Color Grading" className="bg-white text-slate-900 font-semibold">Color Grading & VFX</option>
+                  <option value="All">All Categories</option>
+                  <option value="Video Editing">Video Editing & Reels</option>
+                  <option value="Audio Editing">Audio & Podcast</option>
+                  <option value="Motion Graphics">Motion Graphics & 3D</option>
+                  <option value="Drone Videography">Drone & FPV Flying</option>
+                  <option value="Color Grading">DaVinci Colorist</option>
                 </select>
-                <div className="absolute right-3 top-3.5 pointer-events-none text-slate-400 text-[10px]">▼</div>
+                <div className="absolute right-3 top-3 pointer-events-none text-slate-400 text-[10px]">▼</div>
               </div>
 
-              {/* Location Input */}
+              {/* Location Scope */}
               <div className="relative">
-                <MapPin className="w-4 h-4 text-cyan-600 absolute left-3.5 top-3" />
+                <MapPin className="w-4 h-4 text-[#1DBF73] absolute left-3.5 top-3" />
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  placeholder="City/Country (London, Tokyo)"
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#1473E6] focus:ring-1 focus:ring-[#1473E6] transition-all"
+                  placeholder="City (Mumbai, Bengaluru)"
+                  className="w-full pl-10 pr-3 py-2 rounded border border-[#C5C7D0] text-xs font-semibold text-[#222325] focus:outline-none focus:border-[#1DBF73]"
                 />
               </div>
 
               {/* Max Rate Slider */}
               <div className="flex flex-col justify-center px-2">
-                <div className="flex justify-between text-[11px] font-bold mb-1.5">
-                  <span className="text-slate-500">Max Rate:</span>
-                  <span className="text-emerald-700 font-mono text-xs font-extrabold">{formatPrice(maxRate)}/hr</span>
+                <div className="flex justify-between text-[11px] font-bold mb-1">
+                  <span className="text-[#74767E]">Max Budget:</span>
+                  <span className="text-[#1DBF73] font-extrabold">{formatPrice(maxRate)}/hr</span>
                 </div>
                 <input
                   type="range"
@@ -165,20 +138,20 @@ export default function SearchCreators() {
                   step="5"
                   value={maxRate}
                   onChange={(e) => setMaxRate(Number(e.target.value))}
-                  className="w-full accent-[#1473E6] cursor-pointer h-1.5 bg-slate-200 rounded-lg"
+                  className="w-full accent-[#1DBF73] cursor-pointer h-1.5 bg-[#E4E5E7] rounded"
                 />
               </div>
 
               {/* Available Checkbox */}
-              <div className="flex items-center justify-center sm:justify-start lg:justify-center px-2">
-                <label className="text-xs text-slate-700 font-bold flex items-center gap-2 cursor-pointer select-none">
+              <div className="flex items-center justify-center">
+                <label className="text-xs text-[#404145] font-bold flex items-center gap-2 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={availableOnly}
                     onChange={(e) => setAvailableOnly(e.target.checked)}
-                    className="w-4 h-4 rounded accent-[#1473E6] bg-slate-50 border-slate-300 cursor-pointer"
+                    className="w-4 h-4 rounded accent-[#1DBF73] cursor-pointer"
                   />
-                  <span>Available Now Only</span>
+                  <span>Online & Available</span>
                 </label>
               </div>
 
@@ -189,7 +162,7 @@ export default function SearchCreators() {
       </section>
 
       {/* Grid or Map Content */}
-      <div className="max-w-7xl mx-auto py-10 px-4">
+      <div className="max-w-7xl mx-auto py-10 px-4 lg:px-10">
         {viewMode === 'map' ? (
           <div className="space-y-6">
             <LocationMap
@@ -201,64 +174,67 @@ export default function SearchCreators() {
         ) : (
           <div>
             {loading ? (
-              <div className="text-center py-20 text-slate-500 text-sm font-semibold">Searching CreatorHub regional index...</div>
+              <div className="text-center py-20 text-[#74767E] text-sm font-semibold">Searching Indian creative services index...</div>
             ) : creators.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-2xl border border-slate-200 space-y-3 shadow-sm">
+              <div className="text-center py-20 bg-[#F7F7F7] rounded-lg border border-[#E4E5E7] space-y-3">
                 <Filter className="w-8 h-8 text-slate-400 mx-auto" />
-                <h3 className="text-base font-bold text-slate-900">No creators match your criteria</h3>
-                <p className="text-xs text-slate-500">Try broadening your location or rate range.</p>
+                <h3 className="text-base font-bold text-[#222325]">No services match your criteria</h3>
+                <p className="text-xs text-[#74767E]">Try broadening your location or budget search.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {creators.map((c) => (
-                  <div key={c.id} className="adobe-light-card rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-sm">
-                    <div className="space-y-3">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="relative">
-                            <img src={c.avatar} alt={c.name} className="w-14 h-14 rounded-xl object-cover ring-2 ring-[#1473E6]" />
-                            <span className="absolute -bottom-1 -right-1 text-sm">{getRegionFlag(c.location)}</span>
-                          </div>
+                  <div key={c.id} className="fiverr-card flex flex-col justify-between overflow-hidden">
+                    
+                    <div className="h-44 bg-slate-200 relative overflow-hidden group">
+                      <img
+                        src={c.portfolio?.[0]?.thumbnail || "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80"}
+                        alt={c.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <button className="absolute top-3 right-3 p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-md transition-all">
+                        <Heart className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2.5">
+                          <img src={c.avatar} alt={c.name} className="w-8 h-8 rounded-full object-cover ring-2 ring-[#1DBF73]" />
                           <div>
-                            <div className="flex items-center gap-1.5">
-                              <h3 className="text-base font-bold text-slate-900">{c.name}</h3>
-                              {c.verified && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+                            <div className="text-xs font-bold text-[#222325] flex items-center gap-1">
+                              <span>{c.name}</span>
+                              <span className="text-[10px] bg-[#1DBF73]/10 text-[#1DBF73] px-1.5 py-0.2 rounded font-extrabold">Level 2</span>
                             </div>
-                            <p className="text-xs text-[#1473E6] font-medium line-clamp-1">{c.title}</p>
+                            <div className="text-[10px] text-[#74767E]">{c.location}</div>
                           </div>
+                        </div>
+
+                        <h3 className="text-xs text-[#404145] font-semibold line-clamp-2 hover:text-[#1DBF73] cursor-pointer">
+                          I will deliver top quality {c.title.toLowerCase()} tailored for your brand or video.
+                        </h3>
+
+                        <div className="flex items-center gap-1 text-xs font-bold text-[#222325]">
+                          <Star className="w-3.5 h-3.5 fill-[#FFB800] text-[#FFB800]" />
+                          <span>{c.rating || 5.0}</span>
+                          <span className="text-[#74767E] font-normal">({c.reviewsCount || 42})</span>
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
-                        <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-cyan-600" /> {c.location}</span>
-                        <span className="text-emerald-700 font-extrabold text-sm">{formatPrice(c.hourlyRate)}/hr</span>
+                      <div className="pt-3 border-t border-[#E4E5E7] flex items-center justify-between">
+                        <button
+                          onClick={() => setSelectedCreator(c)}
+                          className="text-xs font-bold text-[#1DBF73] hover:underline"
+                        >
+                          Digital Resume
+                        </button>
+                        <div className="text-right">
+                          <span className="text-[10px] uppercase text-[#74767E] block font-semibold">Starting at</span>
+                          <span className="text-sm font-extrabold text-[#222325]">{formatPrice(c.hourlyRate * 3)}</span>
+                        </div>
                       </div>
 
-                      <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">{c.bio}</p>
-
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {c.skills?.map((s, idx) => (
-                          <span key={idx} className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="pt-4 border-t border-slate-100 flex items-center gap-2">
-                      <button
-                        onClick={() => setSelectedCreator(c)}
-                        className="flex-1 py-2.5 rounded-xl bg-[#1473E6] hover:bg-[#0D66D0] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center gap-1.5"
-                      >
-                        <FileText className="w-3.5 h-3.5" /> Digital Resume
-                      </button>
-                      <button
-                        onClick={() => setChatRecipient(c)}
-                        className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all border border-slate-200"
-                        title="Send Message"
-                      >
-                        <MessageSquare className="w-4 h-4" />
-                      </button>
                     </div>
 
                   </div>
