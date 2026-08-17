@@ -47,7 +47,6 @@ function App() {
                 <div className="md:col-span-2 space-y-3">
                   <Link to="/" className="text-2xl font-extrabold text-white">
                     Creator<span className="text-[#1DBF73]">Hub</span>
-                    <span className="text-[#1DBF73]">.</span>
                   </Link>
                   <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
                     Find the perfect Indian creative services for your business. Verified cinematographers, DaVinci colorists, FPV drone pilots, and audio engineers in Mumbai, Bengaluru, Delhi & Hyderabad.

@@ -37,7 +37,6 @@ export default function Navbar() {
               isHome && !scrolled ? 'text-white' : 'text-[#222325]'
             }`}>
               Creator<span className="text-[#1DBF73]">Hub</span>
-              <span className="text-[#1DBF73] text-3xl leading-none">.</span>
             </span>
           </Link>
 
