@@ -18,7 +18,7 @@ function App() {
     <AuthProvider>
       <CurrencyProvider>
         <Router>
-          <div className="min-h-screen bg-[#FFFFFF] text-[#222325] flex flex-col font-sans selection:bg-[#1DBF73] selection:text-white">
+          <div className="min-h-screen bg-[#ffffff] text-[#0f172a] flex flex-col font-sans selection:bg-[#000000] selection:text-white">
             
             {/* Top Navigation Header */}
             <Navbar />
@@ -40,13 +40,13 @@ function App() {
             {/* Persistent RAG AI Copilot Floating Assistant */}
             <AICopilotWidget />
 
-            {/* Iconic Fiverr Dark Footer */}
-            <footer className="bg-[#1f2127] border-t border-slate-800 py-12 text-slate-300 text-xs">
+            {/* Iconic Black & White Footer */}
+            <footer className="bg-[#000000] border-t border-slate-800 py-12 text-slate-300 text-xs">
               <div className="max-w-7xl mx-auto px-4 lg:px-10 grid grid-cols-1 md:grid-cols-5 gap-8">
                 
                 <div className="md:col-span-2 space-y-3">
                   <Link to="/" className="text-2xl font-extrabold text-white">
-                    Creator<span className="text-[#1DBF73]">Hub</span>
+                    Creator<span className="text-slate-400">Hub</span>
                   </Link>
                   <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
                     Find the perfect Indian creative services for your business. Verified cinematographers, DaVinci colorists, FPV drone pilots, and audio engineers in Mumbai, Bengaluru, Delhi & Hyderabad.
@@ -59,28 +59,28 @@ function App() {
                 <div>
                   <h4 className="font-extrabold text-white text-sm mb-3">Categories</h4>
                   <ul className="space-y-2 text-slate-400">
-                    <li><Link to="/search?skill=Video Editing" className="hover:text-[#1DBF73] transition-colors">Video Editing & Reels</Link></li>
-                    <li><Link to="/search?skill=Color Grading" className="hover:text-[#1DBF73] transition-colors">DaVinci Color Grading</Link></li>
-                    <li><Link to="/search?skill=Drone Videography" className="hover:text-[#1DBF73] transition-colors">FPV Drone Flying</Link></li>
-                    <li><Link to="/search?skill=Audio Editing" className="hover:text-[#1DBF73] transition-colors">Audio & Podcast Mixing</Link></li>
+                    <li><Link to="/search?skill=Video Editing" className="hover:text-white transition-colors">Video Editing & Reels</Link></li>
+                    <li><Link to="/search?skill=Color Grading" className="hover:text-white transition-colors">DaVinci Color Grading</Link></li>
+                    <li><Link to="/search?skill=Drone Videography" className="hover:text-white transition-colors">FPV Drone Flying</Link></li>
+                    <li><Link to="/search?skill=Audio Editing" className="hover:text-white transition-colors">Audio & Podcast Mixing</Link></li>
                   </ul>
                 </div>
 
                 <div>
                   <h4 className="font-extrabold text-white text-sm mb-3">Creator Tools</h4>
                   <ul className="space-y-2 text-slate-400">
-                    <li><Link to="/tools" className="hover:text-[#1DBF73] transition-colors">Freelance Rate Calculator</Link></li>
-                    <li><Link to="/tools" className="hover:text-[#1DBF73] transition-colors">Commercial Contract Generator</Link></li>
-                    <li><Link to="/tools" className="hover:text-[#1DBF73] transition-colors">AI Video Script Generator</Link></li>
+                    <li><Link to="/tools" className="hover:text-white transition-colors">Freelance Rate Calculator</Link></li>
+                    <li><Link to="/tools" className="hover:text-white transition-colors">Commercial Contract Generator</Link></li>
+                    <li><Link to="/tools" className="hover:text-white transition-colors">AI Video Script Generator</Link></li>
                   </ul>
                 </div>
 
                 <div>
                   <h4 className="font-extrabold text-white text-sm mb-3">Account</h4>
                   <ul className="space-y-2 text-slate-400">
-                    <li><Link to="/login" className="hover:text-[#1DBF73] transition-colors">Sign In / Join</Link></li>
-                    <li><Link to="/creator-dashboard" className="hover:text-[#1DBF73] transition-colors">Creator Dashboard</Link></li>
-                    <li><Link to="/admin" className="hover:text-[#1DBF73] transition-colors">Admin Verification Portal</Link></li>
+                    <li><Link to="/login" className="hover:text-white transition-colors">Sign In / Join</Link></li>
+                    <li><Link to="/creator-dashboard" className="hover:text-white transition-colors">Creator Dashboard</Link></li>
+                    <li><Link to="/admin" className="hover:text-white transition-colors">Admin Verification Portal</Link></li>
                   </ul>
                 </div>
 

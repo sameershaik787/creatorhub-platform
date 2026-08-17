@@ -5,16 +5,72 @@
 @layer base {
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #FFFFFF;
-    color: #222325;
+    background-color: #ffffff;
+    color: #0f172a;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: #222325;
+    color: #0f172a;
   }
 }
 
-/* Fiverr & CreatorHub Smooth Animation Utility Classes */
+/* Black & White Design System Tokens */
+.bw-black-bg {
+  background-color: #000000;
+}
+
+.bw-black-text {
+  color: #000000;
+}
+
+.bw-[#000000]-bg {
+  background-color: #000000;
+}
+
+.bw-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bw-card:hover {
+  border-color: #000000;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+.bw-btn-black {
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bw-btn-black:hover {
+  background-color: #1e293b;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+.bw-input {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.bw-input:focus {
+  background-color: #ffffff;
+  border-color: #000000;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Entrance Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -45,62 +101,18 @@
   animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Smooth Transitions & Card Elevation */
-.fiverr-card {
-  background-color: #FFFFFF;
-  border: 1px solid #E4E5E7;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.fiverr-card:hover {
-  border-color: #1DBF73;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  transform: translateY(-3px);
-}
-
-.fiverr-btn-green {
-  background-color: #1DBF73;
-  color: #FFFFFF;
-  font-weight: 700;
-  border-radius: 6px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.fiverr-btn-green:hover {
-  background-color: #19a463;
-  box-shadow: 0 4px 14px rgba(29, 191, 115, 0.35);
-  transform: translateY(-1px);
-}
-
-.fiverr-input {
-  background-color: #F7F7F7;
-  border: 1px solid #E4E5E7;
-  color: #222325;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-}
-
-.fiverr-input:focus {
-  background-color: #FFFFFF;
-  border-color: #1DBF73;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(29, 191, 115, 0.15);
-}
-
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #F7F7F7;
+  background: #f8fafc;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C5C7D0;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #1DBF73;
+  background: #000000;
 }
