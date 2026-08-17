@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCurrency } from '../context/CurrencyContext';
-import { Briefcase, DollarSign, Clock, MapPin, Send, CheckCircle2, User, PlusCircle, AlertCircle, ArrowRight, ShieldCheck, Lock, Upload, Star, MessageSquare } from 'lucide-react';
+import { Briefcase, DollarSign, Clock, MapPin, Send, CheckCircle2, User, PlusCircle, AlertCircle, ArrowRight, ShieldCheck, Lock, Upload, Star, MessageSquare, Sparkles, UserCheck } from 'lucide-react';
 
 export default function JobBoard() {
-  const { user } = useAuth();
+  const { user, login } = useAuth();
   const { formatPrice } = useCurrency();
 
   const [jobs, setJobs] = useState([]);
@@ -12,10 +12,10 @@ export default function JobBoard() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [proposals, setProposals] = useState([]);
 
-  // Form States
-  const [bidAmount, setBidAmount] = useState('');
-  const [estimatedDays, setEstimatedDays] = useState('');
-  const [coverLetter, setCoverLetter] = useState('');
+  // Form States (Pre-filled for 1-click instant testing)
+  const [bidAmount, setBidAmount] = useState('66800');
+  const [estimatedDays, setEstimatedDays] = useState('3');
+  const [coverLetter, setCoverLetter] = useState('I am a senior video editor with 6+ years of experience cutting high-retention YouTube Shorts & tech Reels.');
 
   // Deliverable Submission State (Freelancer)
   const [deliverableUrl, setDeliverableUrl] = useState('https://www.w3schools.com/html/mov_bbb.mp4');
@@ -23,7 +23,7 @@ export default function JobBoard() {
 
   // Review Submission State (Client)
   const [reviewRating, setReviewRating] = useState(5);
-  const [reviewComment, setReviewComment] = useState('Excellent work quality and fast delivery!');
+  const [reviewComment, setReviewComment] = useState('Excellent work quality, fast turnaround, and great communication!');
 
   // Feedback State
   const [actionSuccess, setActionSuccess] = useState('');
@@ -50,9 +50,8 @@ export default function JobBoard() {
 
   const fetchProposals = (jobId) => {
     const token = localStorage.getItem('token');
-    if (!token) return;
     fetch(`/api/jobs/${jobId}/proposals`, {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     })
       .then(res => res.json())
       .then(data => setProposals(Array.isArray(data) ? data : []))
@@ -66,12 +65,35 @@ export default function JobBoard() {
     fetchProposals(job.id);
   };
 
+  // Quick Demo Login Helper
+  const handleQuickLogin = async (email, password) => {
+    try {
+      await login(email, password);
+      setActionSuccess(`Logged in as ${email.includes('ronak') ? 'Freelancer (Ronak)' : 'Hirer Client'}`);
+      if (selectedJob) fetchProposals(selectedJob.id);
+    } catch (err) {
+      setActionError(err.message);
+    }
+  };
+
   // 1. Submit Proposal (Freelancer)
   const handleSubmitProposal = async (e) => {
     e.preventDefault();
     setActionError('');
     setActionSuccess('');
-    const token = localStorage.getItem('token');
+
+    let token = localStorage.getItem('token');
+    if (!token || user?.role !== 'creator') {
+      // Auto-login as freelancer for 1-click convenience
+      try {
+        await login('ronak@creatorhub.com', 'password123');
+        token = localStorage.getItem('token');
+      } catch (err) {
+        setActionError('Please sign in as a freelancer to submit a proposal.');
+        return;
+      }
+    }
+
     try {
       const res = await fetch('/api/proposals', {
         method: 'POST',
@@ -89,10 +111,7 @@ export default function JobBoard() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to submit proposal');
 
-      setActionSuccess('Proposal submitted successfully!');
-      setBidAmount('');
-      setEstimatedDays('');
-      setCoverLetter('');
+      setActionSuccess('Proposal submitted successfully! Client has been notified.');
       fetchProposals(selectedJob.id);
       fetchJobs();
     } catch (err) {
@@ -102,7 +121,20 @@ export default function JobBoard() {
 
   // 2. Hire Freelancer & Fund Escrow (Client)
   const handleHireCreator = async (proposalId) => {
-    const token = localStorage.getItem('token');
+    setActionError('');
+    setActionSuccess('');
+
+    let token = localStorage.getItem('token');
+    if (!token || user?.role !== 'client') {
+      try {
+        await login('client@creatorhub.com', 'password123');
+        token = localStorage.getItem('token');
+      } catch (err) {
+        setActionError('Please sign in as a client to hire.');
+        return;
+      }
+    }
+
     try {
       const res = await fetch(`/api/proposals/${proposalId}/hire`, {
         method: 'POST',
@@ -123,7 +155,20 @@ export default function JobBoard() {
   // 3. Submit Deliverable (Freelancer)
   const handleSubmitDeliverable = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    setActionError('');
+    setActionSuccess('');
+
+    let token = localStorage.getItem('token');
+    if (!token || user?.role !== 'creator') {
+      try {
+        await login('ronak@creatorhub.com', 'password123');
+        token = localStorage.getItem('token');
+      } catch (err) {
+        setActionError('Please sign in as the hired freelancer to submit work.');
+        return;
+      }
+    }
+
     try {
       const res = await fetch(`/api/jobs/${selectedJob.id}/deliver`, {
         method: 'POST',
@@ -146,7 +191,20 @@ export default function JobBoard() {
 
   // 4. Approve Deliverable & Release Escrow Payment (Client)
   const handleApproveDeliverable = async () => {
-    const token = localStorage.getItem('token');
+    setActionError('');
+    setActionSuccess('');
+
+    let token = localStorage.getItem('token');
+    if (!token || user?.role !== 'client') {
+      try {
+        await login('client@creatorhub.com', 'password123');
+        token = localStorage.getItem('token');
+      } catch (err) {
+        setActionError('Please sign in as client to approve deliverable.');
+        return;
+      }
+    }
+
     try {
       const res = await fetch(`/api/jobs/${selectedJob.id}/approve`, {
         method: 'POST',
@@ -166,7 +224,20 @@ export default function JobBoard() {
   // 5. Submit Rating & Review (Client)
   const handleSubmitReview = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    setActionError('');
+    setActionSuccess('');
+
+    let token = localStorage.getItem('token');
+    if (!token || user?.role !== 'client') {
+      try {
+        await login('client@creatorhub.com', 'password123');
+        token = localStorage.getItem('token');
+      } catch (err) {
+        setActionError('Please sign in as client to submit a review.');
+        return;
+      }
+    }
+
     try {
       const res = await fetch(`/api/jobs/${selectedJob.id}/review`, {
         method: 'POST',
@@ -187,22 +258,53 @@ export default function JobBoard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] font-sans py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] font-sans py-8 px-4 sm:px-6 lg:px-8 animate-fadeIn">
       
       {/* Workflow Steps Indicator Bar */}
       <div className="max-w-7xl mx-auto mb-8 p-4 rounded-2xl bg-white border border-[#e2e8f0] shadow-sm space-y-3">
         <div className="flex items-center justify-between text-xs font-extrabold text-[#000000]">
-          <span>⚡ End-to-End Freelance Milestone Workflow</span>
-          <span className="text-[#64748b] font-normal">India Scope • INR (₹) Escrow</span>
+          <span className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-[#000000]" /> End-to-End Freelance Milestone Workflow Workspace
+          </span>
+          <span className="text-[#64748b] font-normal">India Scope • INR (₹) Escrow Protection</span>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 text-[10px] text-center font-bold">
-          <div className="p-2 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] text-[#0f172a]">1. Post Project</div>
-          <div className="p-2 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] text-[#0f172a]">2. Send Proposal</div>
-          <div className="p-2 rounded-lg bg-[#000000] text-white">3. Hire & Fund Escrow</div>
-          <div className="p-2 rounded-lg bg-[#f8fafc] border border-[#000000] text-[#000000]">4. Submit Work</div>
-          <div className="p-2 rounded-lg bg-[#000000] text-white">5. Client Approve</div>
-          <div className="p-2 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] text-[#0f172a]">6. Release Earnings</div>
+
+        {/* 6 Step Interactive Status Bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-[10px] text-center font-bold">
+          <div className="p-2.5 rounded-xl bg-slate-900 text-white shadow-sm">1. Post Project</div>
+          <div className="p-2.5 rounded-xl bg-slate-100 border border-[#e2e8f0] text-[#0f172a]">2. Send Proposal</div>
+          <div className="p-2.5 rounded-xl bg-slate-900 text-white shadow-sm">3. Hire & Fund Escrow</div>
+          <div className="p-2.5 rounded-xl bg-slate-100 border border-[#e2e8f0] text-[#0f172a]">4. Submit Work</div>
+          <div className="p-2.5 rounded-xl bg-slate-900 text-white shadow-sm">5. Client Approve</div>
+          <div className="p-2.5 rounded-xl bg-slate-100 border border-[#e2e8f0] text-[#0f172a]">6. Release Earnings</div>
         </div>
+
+        {/* Quick Demo Mode Switcher Bar */}
+        <div className="pt-2 border-t border-[#e2e8f0] flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-[#64748b]">Current Mode:</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-slate-100 font-extrabold text-[#000000] border border-[#e2e8f0]">
+              {user ? `${user.name} (${user.role.toUpperCase()})` : 'Guest Visitor'}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-[#64748b] font-semibold">1-Click Test Switcher:</span>
+            <button
+              onClick={() => handleQuickLogin('ronak@creatorhub.com', 'password123')}
+              className="px-3 py-1 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 hover:bg-emerald-100 text-xs font-bold transition-all flex items-center gap-1"
+            >
+              <UserCheck className="w-3.5 h-3.5" /> 🇮🇳 Freelancer (Ronak)
+            </button>
+            <button
+              onClick={() => handleQuickLogin('client@creatorhub.com', 'password123')}
+              className="px-3 py-1 rounded-lg bg-purple-50 border border-purple-300 text-purple-800 hover:bg-purple-100 text-xs font-bold transition-all flex items-center gap-1"
+            >
+              <UserCheck className="w-3.5 h-3.5" /> 🧑‍💼 Hirer Client
+            </button>
+          </div>
+        </div>
+
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -270,7 +372,7 @@ export default function JobBoard() {
               <div className="space-y-3 border-b border-[#e2e8f0] pb-5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-[#64748b]">Posted by {selectedJob.clientName} ({selectedJob.clientCompany})</span>
-                  <span className="text-lg font-extrabold text-[#000000]">{formatPrice(selectedJob.budget)}</span>
+                  <span className="text-xl font-extrabold text-[#000000]">{formatPrice(selectedJob.budget)}</span>
                 </div>
                 <h2 className="text-2xl font-extrabold text-[#0f172a]">{selectedJob.title}</h2>
                 <p className="text-xs text-[#334155] leading-relaxed">{selectedJob.description}</p>
@@ -286,118 +388,145 @@ export default function JobBoard() {
 
               {/* Action Feedback Banners */}
               {actionSuccess && (
-                <div className="p-3 rounded-xl bg-slate-100 border border-[#000000] text-[#000000] text-xs font-bold flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#000000]" />
+                <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-bold flex items-center gap-2 animate-fadeIn">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>{actionSuccess}</span>
                 </div>
               )}
 
               {actionError && (
-                <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 text-rose-600" />
+                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold flex items-center gap-2 animate-fadeIn">
+                  <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
                   <span>{actionError}</span>
                 </div>
               )}
 
               {/* ---------------------------------------------------- */}
-              {/* WORKFLOW PHASE 1: FREELANCER SUBMIT PROPOSAL */}
+              {/* WORKFLOW PHASE 1: FREELANCER PROPOSAL SUBMISSION */}
               {/* ---------------------------------------------------- */}
-              {user?.role === 'creator' && selectedJob.status === 'open' && (
-                <form onSubmit={handleSubmitProposal} className="p-5 rounded-2xl bg-[#f8fafc] border border-[#e2e8f0] space-y-4">
-                  <h3 className="text-sm font-bold text-[#0f172a] flex items-center gap-2">
-                    <Send className="w-4 h-4 text-[#000000]" /> Submit Proposal to Client
-                  </h3>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-[11px] font-bold text-[#404145]">Bid Amount (₹)</label>
-                      <input
-                        type="number"
-                        required
-                        value={bidAmount}
-                        onChange={(e) => setBidAmount(e.target.value)}
-                        placeholder="e.g. 300"
-                        className="bw-input w-full px-3 py-2 text-xs font-bold"
-                      />
+              {selectedJob.status === 'open' && (
+                <div className="space-y-6">
+                  
+                  {/* Proposal Form Card */}
+                  <form onSubmit={handleSubmitProposal} className="p-5 rounded-2xl bg-[#f8fafc] border border-[#e2e8f0] space-y-4">
+                    <div className="flex items-center justify-between border-b border-[#e2e8f0] pb-2">
+                      <h3 className="text-sm font-bold text-[#0f172a] flex items-center gap-2">
+                        <Send className="w-4 h-4 text-[#000000]" /> Step 1: Send Freelancer Proposal
+                      </h3>
+                      <span className="text-[10px] font-extrabold text-[#000000] bg-white px-2 py-0.5 rounded border border-[#e2e8f0]">
+                        Auto-Submit Ready
+                      </span>
                     </div>
-                    <div>
-                      <label className="text-[11px] font-bold text-[#404145]">Est. Days</label>
-                      <input
-                        type="number"
-                        required
-                        value={estimatedDays}
-                        onChange={(e) => setEstimatedDays(e.target.value)}
-                        placeholder="e.g. 3"
-                        className="bw-input w-full px-3 py-2 text-xs font-bold"
-                      />
-                    </div>
-                  </div>
 
-                  <div>
-                    <label className="text-[11px] font-bold text-[#404145]">Cover Letter</label>
-                    <textarea
-                      required
-                      rows={3}
-                      value={coverLetter}
-                      onChange={(e) => setCoverLetter(e.target.value)}
-                      placeholder="Why are you the best fit for this project?"
-                      className="bw-input w-full p-3 text-xs"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="bw-btn-black w-full py-2.5 text-xs shadow-sm transition-all"
-                  >
-                    Send Proposal Now
-                  </button>
-                </form>
-              )}
-
-              {/* ---------------------------------------------------- */}
-              {/* WORKFLOW PHASE 2: CLIENT REVIEWS PROPOSALS & HIRES */}
-              {/* ---------------------------------------------------- */}
-              {user?.role === 'client' && selectedJob.status === 'open' && (
-                <div className="space-y-3">
-                  <h3 className="text-sm font-bold text-[#0f172a]">Received Proposals ({proposals.length})</h3>
-                  {proposals.length === 0 ? (
-                    <div className="text-xs text-[#64748b] py-4 text-center">No proposals received yet.</div>
-                  ) : (
-                    proposals.map((p) => (
-                      <div key={p.id} className="p-4 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] flex items-center justify-between">
-                        <div>
-                          <div className="text-xs font-bold text-[#0f172a]">{p.creatorName}</div>
-                          <div className="text-[11px] text-[#64748b]">{p.coverLetter}</div>
-                          <div className="text-[10px] text-[#000000] font-extrabold mt-1">Bid: {formatPrice(p.bidAmount)} • Delivery: {p.estimatedDays} Days</div>
-                        </div>
-
-                        <button
-                          onClick={() => handleHireCreator(p.id)}
-                          className="bw-btn-black px-4 py-2 text-xs shadow-sm transition-all"
-                        >
-                          Hire & Fund Escrow
-                        </button>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[11px] font-bold text-[#404145]">Bid Amount (₹)</label>
+                        <input
+                          type="number"
+                          required
+                          value={bidAmount}
+                          onChange={(e) => setBidAmount(e.target.value)}
+                          placeholder="e.g. 66800"
+                          className="bw-input w-full px-3 py-2 text-xs font-bold"
+                        />
                       </div>
-                    ))
-                  )}
+                      <div>
+                        <label className="text-[11px] font-bold text-[#404145]">Est. Delivery (Days)</label>
+                        <input
+                          type="number"
+                          required
+                          value={estimatedDays}
+                          onChange={(e) => setEstimatedDays(e.target.value)}
+                          placeholder="e.g. 3"
+                          className="bw-input w-full px-3 py-2 text-xs font-bold"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-bold text-[#404145]">Cover Letter & Proposal Notes</label>
+                      <textarea
+                        required
+                        rows={3}
+                        value={coverLetter}
+                        onChange={(e) => setCoverLetter(e.target.value)}
+                        placeholder="Why are you the best fit for this project?"
+                        className="bw-input w-full p-3 text-xs font-medium"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="bw-btn-black w-full py-3 text-xs shadow-sm transition-all flex items-center justify-center gap-2"
+                    >
+                      <Send className="w-4 h-4" /> Send Proposal Now
+                    </button>
+                  </form>
+
+                  {/* ---------------------------------------------------- */}
+                  {/* WORKFLOW PHASE 2: CLIENT REVIEWS PROPOSALS & HIRES */}
+                  {/* ---------------------------------------------------- */}
+                  <div className="space-y-3 p-5 rounded-2xl bg-white border border-[#e2e8f0]">
+                    <h3 className="text-sm font-extrabold text-[#0f172a] flex items-center justify-between">
+                      <span>Step 2: Client Review & Escrow Funding ({proposals.length} Proposals)</span>
+                    </h3>
+
+                    {proposals.length === 0 ? (
+                      <div className="text-xs text-[#64748b] py-3 text-center bg-[#f8fafc] rounded-xl border border-[#e2e8f0]">
+                        No proposals submitted yet. Click <strong>"Send Proposal Now"</strong> above to submit the first proposal!
+                      </div>
+                    ) : (
+                      proposals.map((p) => (
+                        <div key={p.id} className="p-4 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                          <div className="space-y-1">
+                            <div className="text-xs font-bold text-[#0f172a] flex items-center gap-1.5">
+                              <span>{p.creatorName}</span>
+                              <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-extrabold">Verified Freelancer</span>
+                            </div>
+                            <div className="text-[11px] text-[#64748b]">{p.coverLetter}</div>
+                            <div className="text-[10px] text-[#000000] font-extrabold">Bid: {formatPrice(p.bidAmount)} • Delivery: {p.estimatedDays} Days</div>
+                          </div>
+
+                          <button
+                            onClick={() => handleHireCreator(p.id)}
+                            className="bw-btn-black px-5 py-2.5 text-xs shadow-sm transition-all shrink-0 flex items-center gap-1.5"
+                          >
+                            <ShieldCheck className="w-4 h-4 text-emerald-400" /> Hire & Fund Escrow (₹{p.bidAmount})
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
                 </div>
               )}
 
               {/* ---------------------------------------------------- */}
-              {/* WORKFLOW PHASE 3: FREELANCER SUBMITS DELIVERABLE */}
+              {/* WORKFLOW PHASE 3 & 4: HIRED WORKSPACE & DELIVERABLE APPROVAL */}
               {/* ---------------------------------------------------- */}
               {selectedJob.status === 'hired' && (
-                <div className="p-5 rounded-2xl bg-[#f8fafc] border border-[#000000] space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-extrabold text-[#000000] flex items-center gap-1.5">
-                      <Lock className="w-4 h-4 text-[#000000]" /> Escrow Status: {selectedJob.escrowStatus?.toUpperCase()} (₹{selectedJob.agreedAmount || selectedJob.budget})
+                <div className="p-6 rounded-2xl bg-[#f8fafc] border border-[#000000] space-y-6">
+                  
+                  <div className="flex items-center justify-between border-b border-[#e2e8f0] pb-4">
+                    <div>
+                      <div className="text-xs font-extrabold text-[#000000] flex items-center gap-1.5">
+                        <Lock className="w-4 h-4 text-[#000000]" /> Escrow Locked: ₹{selectedJob.agreedAmount || selectedJob.budget}
+                      </div>
+                      <div className="text-[11px] text-[#64748b] mt-0.5">Funds held safely in CreatorHub Escrow until client deliverable approval.</div>
+                    </div>
+                    <span className="text-xs font-bold text-[#0f172a] bg-white px-3 py-1 rounded-lg border border-[#e2e8f0]">
+                      Hired: {selectedJob.hiredCreatorName}
                     </span>
-                    <span className="text-xs font-bold text-[#0f172a]">Hired: {selectedJob.hiredCreatorName}</span>
                   </div>
 
-                  {user?.role === 'creator' && selectedJob.deliverableStatus !== 'submitted' && (
-                    <form onSubmit={handleSubmitDeliverable} className="space-y-3">
-                      <h4 className="text-xs font-bold text-[#0f172a]">Submit Completed Deliverable for Client Review</h4>
+                  {/* Submit Deliverable Form (Freelancer) */}
+                  <form onSubmit={handleSubmitDeliverable} className="p-4 rounded-xl bg-white border border-[#e2e8f0] space-y-3">
+                    <h4 className="text-xs font-extrabold text-[#0f172a] flex items-center gap-2">
+                      <Upload className="w-4 h-4 text-[#000000]" /> Step 3: Freelancer Work Submission
+                    </h4>
+                    
+                    <div>
+                      <label className="text-[11px] font-bold text-[#404145]">Deliverable Video / File URL</label>
                       <input
                         type="text"
                         required
@@ -406,41 +535,54 @@ export default function JobBoard() {
                         placeholder="Video / Asset File URL"
                         className="bw-input w-full px-3 py-2 text-xs font-semibold"
                       />
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-bold text-[#404145]">Submission Notes for Client</label>
                       <textarea
                         rows={2}
                         value={deliverableNotes}
                         onChange={(e) => setDeliverableNotes(e.target.value)}
                         placeholder="Notes for client..."
-                        className="bw-input w-full p-2.5 text-xs"
+                        className="bw-input w-full p-2.5 text-xs font-medium"
                       />
-                      <button
-                        type="submit"
-                        className="bw-btn-black w-full py-2.5 text-xs shadow-sm transition-all"
-                      >
-                        Submit Deliverable to Client
-                      </button>
-                    </form>
-                  )}
-
-                  {/* ---------------------------------------------------- */}
-                  {/* WORKFLOW PHASE 4: CLIENT APPROVES WORK & RELEASES PAYMENT */}
-                  {/* ---------------------------------------------------- */}
-                  {user?.role === 'client' && selectedJob.deliverableStatus === 'submitted' && (
-                    <div className="space-y-3 p-4 rounded-xl bg-white border border-[#e2e8f0]">
-                      <h4 className="text-xs font-bold text-[#0f172a]">Freelancer Submitted Deliverable:</h4>
-                      <p className="text-xs text-[#334155] font-mono italic">{selectedJob.deliverableNotes}</p>
-                      <a href={selectedJob.deliverableUrl} target="_blank" rel="noreferrer" className="text-xs text-[#000000] underline font-bold block">
-                        Preview Deliverable Video
-                      </a>
-
-                      <button
-                        onClick={handleApproveDeliverable}
-                        className="bw-btn-black w-full py-3 text-xs shadow-md transition-all flex items-center justify-center gap-2"
-                      >
-                        <ShieldCheck className="w-4 h-4" /> Approve Deliverable & Release Escrow Payment (₹{selectedJob.agreedAmount || selectedJob.budget})
-                      </button>
                     </div>
-                  )}
+
+                    <button
+                      type="submit"
+                      className="bw-btn-black w-full py-2.5 text-xs shadow-sm transition-all flex items-center justify-center gap-2"
+                    >
+                      <Upload className="w-4 h-4" /> Submit Work to Client
+                    </button>
+                  </form>
+
+                  {/* Approve Work & Release Payment Button (Client) */}
+                  <div className="p-4 rounded-xl bg-white border border-[#e2e8f0] space-y-3">
+                    <h4 className="text-xs font-extrabold text-[#0f172a] flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" /> Step 4: Client Review & Escrow Release
+                    </h4>
+                    
+                    {selectedJob.deliverableStatus === 'submitted' ? (
+                      <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-xs space-y-2">
+                        <div className="font-bold text-emerald-900">Deliverable Ready for Review:</div>
+                        <p className="text-emerald-800 italic">{selectedJob.deliverableNotes}</p>
+                        <a href={selectedJob.deliverableUrl} target="_blank" rel="noreferrer" className="text-xs text-emerald-900 underline font-bold block">
+                          ▶ Preview Completed Deliverable Video
+                        </a>
+                      </div>
+                    ) : (
+                      <div className="text-xs text-[#64748b] bg-[#f8fafc] p-3 rounded-lg border border-[#e2e8f0]">
+                        Click <strong>"Submit Work to Client"</strong> above to mark deliverable ready for 1-click escrow payment release!
+                      </div>
+                    )}
+
+                    <button
+                      onClick={handleApproveDeliverable}
+                      className="bw-btn-black w-full py-3 text-xs shadow-md transition-all flex items-center justify-center gap-2"
+                    >
+                      <ShieldCheck className="w-4 h-4 text-emerald-400" /> Approve Deliverable & Release Escrow Payment (₹{selectedJob.agreedAmount || selectedJob.budget})
+                    </button>
+                  </div>
 
                 </div>
               )}
@@ -449,42 +591,43 @@ export default function JobBoard() {
               {/* WORKFLOW PHASE 5: COMPLETED JOB & RATING REVIEW */}
               {/* ---------------------------------------------------- */}
               {selectedJob.status === 'completed' && (
-                <div className="p-5 rounded-2xl bg-slate-100 border border-[#000000] space-y-4">
-                  <div className="flex items-center gap-2 text-xs font-extrabold text-[#000000]">
-                    <CheckCircle2 className="w-4 h-4 text-[#000000]" /> Project Completed & Escrow Released to Freelancer!
+                <div className="p-6 rounded-2xl bg-slate-900 text-white space-y-5 shadow-lg animate-fadeIn">
+                  <div className="flex items-center gap-2 text-sm font-extrabold text-white">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400" /> Project Completed & Escrow Released to Freelancer Earnings!
                   </div>
 
-                  {user?.role === 'client' && (
-                    <form onSubmit={handleSubmitReview} className="space-y-3 p-4 rounded-xl bg-white border border-[#e2e8f0]">
-                      <h4 className="text-xs font-bold text-[#0f172a]">Leave 1-5 Star Review for {selectedJob.hiredCreatorName}:</h4>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-[#404145]">Rating:</span>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <button
-                            key={star}
-                            type="button"
-                            onClick={() => setReviewRating(star)}
-                            className={`p-1 rounded ${star <= reviewRating ? 'text-[#000000]' : 'text-slate-300'}`}
-                          >
-                            <Star className="w-5 h-5 fill-current" />
-                          </button>
-                        ))}
-                      </div>
-                      <textarea
-                        rows={2}
-                        value={reviewComment}
-                        onChange={(e) => setReviewComment(e.target.value)}
-                        placeholder="Write client testimonial..."
-                        className="bw-input w-full p-2.5 text-xs"
-                      />
-                      <button
-                        type="submit"
-                        className="bw-btn-black w-full py-2 text-xs shadow-sm transition-all"
-                      >
-                        Submit Testimonial & Review
-                      </button>
-                    </form>
-                  )}
+                  <form onSubmit={handleSubmitReview} className="space-y-3 p-4 rounded-xl bg-slate-800 border border-slate-700">
+                    <h4 className="text-xs font-bold text-slate-200">Leave 1-5 Star Review for {selectedJob.hiredCreatorName || 'Ronak Sharma'}:</h4>
+                    
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-slate-300">Rating:</span>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setReviewRating(star)}
+                          className={`p-1 rounded ${star <= reviewRating ? 'text-[#FFB800]' : 'text-slate-600'}`}
+                        >
+                          <Star className="w-5 h-5 fill-current" />
+                        </button>
+                      ))}
+                    </div>
+
+                    <textarea
+                      rows={2}
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                      placeholder="Write client testimonial..."
+                      className="w-full p-2.5 text-xs bg-slate-950 border border-slate-700 text-white rounded-lg focus:outline-none"
+                    />
+
+                    <button
+                      type="submit"
+                      className="w-full py-2.5 bg-white text-slate-950 font-extrabold text-xs rounded-lg hover:bg-slate-200 transition-all"
+                    >
+                      Submit Testimonial & Review
+                    </button>
+                  </form>
                 </div>
               )}
 
