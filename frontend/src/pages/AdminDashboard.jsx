@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCurrency } from '../context/CurrencyContext';
 import ResumeViewer from '../components/ResumeViewer';
-import { ShieldAlert, CheckCircle2, Users, Briefcase, DollarSign, Activity, Lock, AlertCircle, FileText, UserCheck, Check, Globe, Eye, Download, Play } from 'lucide-react';
+import { ShieldAlert, CheckCircle2, Users, Briefcase, DollarSign, Activity, Lock, AlertCircle, FileText, UserCheck, Check, Globe, Eye, Download, Play, ExternalLink, ArrowRight } from 'lucide-react';
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -50,8 +50,18 @@ export default function AdminDashboard() {
       .catch(err => alert('Verification failed'));
   };
 
-  const handleInspectUser = (u) => {
-    // Construct or select full creator object for ResumeViewer modal
+  const handleInspectUser = async (u) => {
+    try {
+      const res = await fetch(`/api/creators/${u.id}`);
+      const data = await res.json();
+      if (res.ok && data && !data.error) {
+        setSelectedCreator(data);
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    // Fallback if client or unlisted creator
     setSelectedCreator({
       ...u,
       title: u.title || (u.role === 'creator' ? 'Senior Content Creator & Editor' : 'Hiring Client'),
@@ -61,8 +71,8 @@ export default function AdminDashboard() {
       reviewsCount: u.reviewsCount || 42,
       skills: u.skills || ['Video Editing', 'Motion Graphics', 'Color Grading'],
       portfolio: u.portfolio || [
-        { title: '4K Commercial Edit', type: 'video', thumbnail: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-        { title: 'Cinematic Color Grading Pass', type: 'video', thumbnail: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80', url: 'https://www.w3schools.com/html/mov_bbb.mp4' }
+        { title: '4K Commercial Reel Edit', type: 'video', thumbnail: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+        { title: 'Cinematic DaVinci Color Pass', type: 'video', thumbnail: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80', url: 'https://www.w3schools.com/html/mov_bbb.mp4' }
       ]
     });
   };
@@ -87,14 +97,14 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] font-sans py-8 px-4 sm:px-6 lg:px-8 animate-fadeIn">
       <div className="max-w-7xl mx-auto space-y-8">
         
-        {/* Admin Header with INR Global Currency Selector */}
+        {/* Admin Header Banner */}
         <div className="p-6 rounded-3xl bg-white border border-[#e2e8f0] shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <ShieldAlert className="w-6 h-6 text-rose-600" />
+              <ShieldAlert className="w-6 h-6 text-[#000000]" />
               <h1 className="text-2xl font-extrabold text-[#0f172a]">CreatorHub Admin Command Center</h1>
             </div>
-            <p className="text-xs text-[#64748b] mt-1">Click any user row to view their profile, digital resume, and download work samples.</p>
+            <p className="text-xs text-[#64748b] mt-1">Click any user name or button below to inspect their digital resume and download work samples.</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -114,7 +124,7 @@ export default function AdminDashboard() {
               </select>
             </div>
 
-            <span className="px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-extrabold">
+            <span className="px-3.5 py-1.5 rounded-full bg-[#000000] text-white text-xs font-extrabold shadow-sm">
               Admin Session
             </span>
           </div>
@@ -149,23 +159,26 @@ export default function AdminDashboard() {
               {pendingCreators.map((creator) => (
                 <div key={creator.id} className="p-4 rounded-2xl bg-[#f8fafc] border border-[#e2e8f0] flex flex-col justify-between space-y-3">
                   <div className="flex items-start gap-3">
-                    <img src={creator.avatar} alt={creator.name} className="w-12 h-12 rounded-xl object-cover ring-2 ring-[#000000]" />
+                    <img
+                      src={creator.avatar}
+                      alt={creator.name}
+                      onClick={() => handleInspectUser(creator)}
+                      className="w-12 h-12 rounded-xl object-cover ring-2 ring-[#000000] cursor-pointer hover:scale-105 transition-transform"
+                    />
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-bold text-[#0f172a]">{creator.name}</h3>
+                        <button
+                          onClick={() => handleInspectUser(creator)}
+                          className="text-sm font-extrabold text-[#0f172a] hover:text-[#000000] hover:underline text-left"
+                        >
+                          {creator.name}
+                        </button>
                         <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold border border-amber-200">
                           Pending
                         </span>
                       </div>
                       <p className="text-xs text-[#000000] font-semibold">{creator.title}</p>
                       <p className="text-[11px] text-[#64748b]">{creator.location} • Rate: {formatPrice(creator.hourlyRate)}/hr</p>
-                      <div className="flex flex-wrap gap-1 pt-1">
-                        {creator.skills?.slice(0, 3).map((s, i) => (
-                          <span key={i} className="text-[9px] px-2 py-0.5 rounded bg-white text-[#0f172a] border border-[#e2e8f0]">
-                            {s}
-                          </span>
-                        ))}
-                      </div>
                     </div>
                   </div>
 
@@ -174,7 +187,7 @@ export default function AdminDashboard() {
                       onClick={() => handleInspectUser(creator)}
                       className="flex-1 py-2 rounded-lg bg-white border border-[#e2e8f0] text-xs font-bold text-[#0f172a] hover:bg-slate-50 transition-all flex items-center justify-center gap-1"
                     >
-                      <FileText className="w-3.5 h-3.5 text-slate-500" /> Inspect Resume & Samples
+                      <FileText className="w-3.5 h-3.5 text-[#000000]" /> Digital Resume & Work Samples
                     </button>
                     <button
                       onClick={() => handleVerifyCreator(creator.id, creator.name)}
@@ -232,43 +245,55 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* 📋 3. COMPLETE USER & CREATOR REGISTRY (INTERACTIVE CLICKABLE ROWS) */}
+        {/* 📋 3. COMPLETE USER & CREATOR REGISTRY (CLICKABLE NAME & DIGITAL RESUME REDIRECT) */}
         <div className="p-6 rounded-3xl bg-white border border-[#e2e8f0] shadow-sm space-y-4">
           <div className="flex items-center justify-between border-b border-[#e2e8f0] pb-3">
-            <h2 className="text-base font-extrabold text-[#0f172a]">Complete User & Creator Registry</h2>
-            <span className="text-xs font-bold text-[#000000]">💡 Click any user row to view profile & download work samples</span>
+            <div>
+              <h2 className="text-base font-extrabold text-[#0f172a]">Complete User & Creator Registry</h2>
+              <p className="text-xs text-[#64748b]">Click any user's name or the "View Digital Resume" button to open their resume and download work samples.</p>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-[#f8fafc] text-[#64748b] uppercase font-bold border-b border-[#e2e8f0]">
                 <tr>
-                  <th className="p-3">User</th>
-                  <th className="p-3">Role</th>
-                  <th className="p-3">Location Scope</th>
-                  <th className="p-3">Verification Status</th>
-                  <th className="p-3">Admin Action</th>
+                  <th className="p-3.5">User</th>
+                  <th className="p-3.5">Role</th>
+                  <th className="p-3.5">Location Scope</th>
+                  <th className="p-3.5">Verification Status</th>
+                  <th className="p-3.5 text-right">Admin Resume Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#e2e8f0]">
                 {usersList.map((u) => (
                   <tr
                     key={u.id}
-                    onClick={() => handleInspectUser(u)}
-                    className="hover:bg-slate-100 transition-colors cursor-pointer group"
+                    className="hover:bg-slate-50 transition-colors group"
                   >
-                    <td className="p-3 flex items-center gap-3">
-                      <img src={u.avatar} alt={u.name} className="w-9 h-9 rounded-full object-cover ring-2 ring-[#e2e8f0] group-hover:ring-[#000000] transition-all" />
-                      <div>
-                        <div className="font-extrabold text-[#0f172a] group-hover:text-[#000000] flex items-center gap-1.5">
-                          <span>{u.name}</span>
-                          <Eye className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <td className="p-3.5">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={u.avatar}
+                          alt={u.name}
+                          onClick={() => handleInspectUser(u)}
+                          className="w-9 h-9 rounded-full object-cover ring-2 ring-[#e2e8f0] group-hover:ring-[#000000] cursor-pointer transition-all"
+                        />
+                        <div>
+                          <button
+                            onClick={() => handleInspectUser(u)}
+                            className="font-extrabold text-[#0f172a] hover:text-[#000000] hover:underline flex items-center gap-1.5 text-xs text-left"
+                          >
+                            <span>{u.name}</span>
+                            <ExternalLink className="w-3 h-3 text-[#000000]" />
+                          </button>
+                          <div className="text-[10px] text-[#64748b]">{u.email}</div>
                         </div>
-                        <div className="text-[10px] text-[#64748b]">{u.email}</div>
                       </div>
                     </td>
-                    <td className="p-3">
-                      <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${
+
+                    <td className="p-3.5">
+                      <span className={`px-2.5 py-1 rounded text-[10px] uppercase font-extrabold ${
                         u.role === 'creator' ? 'bg-[#f8fafc] text-[#0f172a] border border-[#e2e8f0]' :
                         u.role === 'admin' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
                         'bg-slate-100 text-[#0f172a] border border-[#e2e8f0]'
@@ -276,31 +301,34 @@ export default function AdminDashboard() {
                         {u.role}
                       </span>
                     </td>
-                    <td className="p-3 text-[#334155] font-semibold">{u.location || 'Mumbai, India'}</td>
-                    <td className="p-3">
+
+                    <td className="p-3.5 text-[#334155] font-semibold">{u.location || 'Mumbai, India'}</td>
+
+                    <td className="p-3.5">
                       {u.verified ? (
-                        <span className="text-[#000000] font-bold flex items-center gap-1">
+                        <span className="text-[#000000] font-extrabold flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5 text-[#000000]" /> Verified
                         </span>
                       ) : (
-                        <span className="text-amber-700 font-bold flex items-center gap-1">
+                        <span className="text-amber-700 font-extrabold flex items-center gap-1">
                           <AlertCircle className="w-3.5 h-3.5 text-amber-600" /> Pending Approval
                         </span>
                       )}
                     </td>
-                    <td className="p-3" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center gap-2">
+
+                    <td className="p-3.5 text-right">
+                      <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleInspectUser(u)}
-                          className="px-3 py-1 bg-white border border-[#e2e8f0] hover:bg-slate-100 text-[#0f172a] font-bold rounded-lg transition-all flex items-center gap-1 text-[11px]"
+                          className="px-3.5 py-1.5 bg-[#000000] hover:bg-[#1e293b] text-white font-extrabold rounded-lg transition-all flex items-center gap-1.5 text-[11px] shadow-sm"
                         >
-                          <FileText className="w-3 h-3 text-[#000000]" /> Inspect Profile
+                          <FileText className="w-3.5 h-3.5 text-white" /> View Digital Resume & Samples
                         </button>
 
                         {u.role === 'creator' && !u.verified && (
                           <button
                             onClick={() => handleVerifyCreator(u.id, u.name)}
-                            className="px-3 py-1 bg-[#000000] hover:bg-[#1e293b] text-white font-bold rounded-lg transition-all text-[11px]"
+                            className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-all text-[11px]"
                           >
                             Approve
                           </button>
