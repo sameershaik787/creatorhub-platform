@@ -350,6 +350,105 @@ app.get('/api/jobs/:id/proposals', authenticateToken, (req, res) => {
   res.json(props);
 });
 
+// 1. Shortlist Proposal (Client only)
+app.post('/api/proposals/:id/shortlist', authenticateToken, (req, res) => {
+  const props = db.getProposals();
+  const proposal = props.find(p => p.id === req.params.id);
+  if (!proposal) return res.status(404).json({ error: 'Proposal not found' });
+
+  proposal.status = 'shortlisted';
+  db.saveProposal(proposal);
+  res.json({ message: 'Proposal shortlisted', proposal });
+});
+
+// 2. Hire Freelancer & Fund Escrow (Client only)
+app.post('/api/proposals/:id/hire', authenticateToken, (req, res) => {
+  const props = db.getProposals();
+  const proposal = props.find(p => p.id === req.params.id);
+  if (!proposal) return res.status(404).json({ error: 'Proposal not found' });
+
+  const job = db.getJobById(proposal.jobId);
+  if (!job) return res.status(404).json({ error: 'Associated job not found' });
+
+  proposal.status = 'hired';
+  db.saveProposal(proposal);
+
+  job.status = 'hired';
+  job.hiredCreatorId = proposal.creatorId;
+  job.hiredCreatorName = proposal.creatorName;
+  job.escrowStatus = 'funded';
+  job.agreedAmount = proposal.bidAmount;
+  db.saveJob(job);
+
+  // Update Freelancer Escrow Balance
+  const creator = db.getUserById(proposal.creatorId);
+  if (creator) {
+    creator.escrowBalance = (creator.escrowBalance || 0) + proposal.bidAmount;
+    db.saveUser(creator);
+  }
+
+  res.json({ message: `Hired ${proposal.creatorName}. Escrow funded with ₹${proposal.bidAmount}`, job, proposal });
+});
+
+// 3. Submit Deliverable (Freelancer only)
+app.post('/api/jobs/:id/deliver', authenticateToken, (req, res) => {
+  const { deliverableUrl, notes } = req.body;
+  const job = db.getJobById(req.params.id);
+  if (!job) return res.status(404).json({ error: 'Job not found' });
+
+  job.deliverableUrl = deliverableUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
+  job.deliverableNotes = notes || 'Completed video deliverable ready for client review.';
+  job.deliverableStatus = 'submitted';
+  db.saveJob(job);
+
+  res.json({ message: 'Deliverable submitted to client for approval', job });
+});
+
+// 4. Approve Deliverable & Release Escrow Payment (Client only)
+app.post('/api/jobs/:id/approve', authenticateToken, (req, res) => {
+  const job = db.getJobById(req.params.id);
+  if (!job) return res.status(404).json({ error: 'Job not found' });
+
+  job.deliverableStatus = 'approved';
+  job.status = 'completed';
+  job.escrowStatus = 'released';
+  db.saveJob(job);
+
+  // Transfer Escrow Payment to Freelancer Earnings
+  if (job.hiredCreatorId) {
+    const creator = db.getUserById(job.hiredCreatorId);
+    if (creator) {
+      const amount = job.agreedAmount || job.budget || 300;
+      creator.escrowBalance = Math.max(0, (creator.escrowBalance || 0) - amount);
+      creator.earnings = (creator.earnings || 0) + amount;
+      db.saveUser(creator);
+    }
+  }
+
+  res.json({ message: 'Deliverable approved! Escrow payment released to freelancer earnings balance.', job });
+});
+
+// 5. Submit Rating & Review (Client only)
+app.post('/api/jobs/:id/review', authenticateToken, (req, res) => {
+  const { rating, comment } = req.body;
+  const job = db.getJobById(req.params.id);
+  if (!job) return res.status(404).json({ error: 'Job not found' });
+
+  const review = {
+    id: 'rev_' + Date.now(),
+    jobId: job.id,
+    creatorId: job.hiredCreatorId,
+    clientId: req.user.id,
+    clientName: req.user.name,
+    rating: Number(rating) || 5,
+    comment: comment || 'Outstanding deliverable quality and timely communication!',
+    date: new Date().toISOString().split('T')[0]
+  };
+
+  db.addReview(review);
+  res.json({ message: 'Review & rating submitted successfully!', review });
+});
+
 // ----------------------------------------------------
 // CHAT & MESSAGING ROUTES
 // ----------------------------------------------------

@@ -18,7 +18,7 @@ function App() {
     <AuthProvider>
       <CurrencyProvider>
         <Router>
-          <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-[#1473E6] selection:text-white">
+          <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-[#1473E6] selection:text-white">
             
             {/* Top Navigation */}
             <Navbar />
@@ -40,25 +40,25 @@ function App() {
             {/* Persistent RAG AI Copilot Floating Assistant */}
             <AICopilotWidget />
 
-            {/* Adobe Light Multi-Column Footer */}
-            <footer className="bg-slate-50 border-t border-slate-200 py-12 text-slate-600 text-xs">
+            {/* Dark Translucent Multi-Column Footer */}
+            <footer className="bg-slate-950 border-t border-white/10 py-12 text-slate-400 text-xs">
               <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-5 gap-8">
                 
                 <div className="md:col-span-2 space-y-3">
-                  <Link to="/" className="text-xl font-extrabold text-slate-900">
+                  <Link to="/" className="text-xl font-extrabold text-white">
                     Creator<span className="text-[#1473E6]">Hub</span>
                   </Link>
-                  <p className="text-slate-600 text-xs leading-relaxed max-w-sm">
-                    Global freelance marketplace for content creators, cinematographers, audio engineers, and motion artists across USA, UK, India, Japan, Australia & Europe.
+                  <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
+                    Freelance marketplace for content creators, cinematographers, sound engineers, and motion artists across India (Mumbai, Bengaluru, Delhi, Hyderabad, Goa & Pune).
                   </p>
                   <div className="text-[11px] text-slate-500 font-semibold">
-                    Inspired by Adobe Spectrum Light UI Design.
+                    Complete 12-Step Job Lifecycle & Milestone Escrow Payments.
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-extrabold text-slate-900 text-sm mb-3">Marketplace</h4>
-                  <ul className="space-y-2 text-slate-600">
+                  <h4 className="font-extrabold text-white text-sm mb-3">Marketplace</h4>
+                  <ul className="space-y-2 text-slate-400">
                     <li><Link to="/search" className="hover:text-[#1473E6] transition-colors">Find Content Creators</Link></li>
                     <li><Link to="/jobs" className="hover:text-[#1473E6] transition-colors">Freelance Job Board</Link></li>
                     <li><Link to="/search?skill=Video Editing" className="hover:text-[#1473E6] transition-colors">Video Editing Specialists</Link></li>
@@ -67,8 +67,8 @@ function App() {
                 </div>
 
                 <div>
-                  <h4 className="font-extrabold text-slate-900 text-sm mb-3">Creator Tools</h4>
-                  <ul className="space-y-2 text-slate-600">
+                  <h4 className="font-extrabold text-white text-sm mb-3">Creator Tools</h4>
+                  <ul className="space-y-2 text-slate-400">
                     <li><Link to="/tools" className="hover:text-[#1473E6] transition-colors">Freelance Rate Calculator</Link></li>
                     <li><Link to="/tools" className="hover:text-[#1473E6] transition-colors">NDA & Commercial Generator</Link></li>
                     <li><Link to="/tools" className="hover:text-[#1473E6] transition-colors">AI Script Hook Generator</Link></li>
@@ -76,8 +76,8 @@ function App() {
                 </div>
 
                 <div>
-                  <h4 className="font-extrabold text-slate-900 text-sm mb-3">Account & Admin</h4>
-                  <ul className="space-y-2 text-slate-600">
+                  <h4 className="font-extrabold text-white text-sm mb-3">Account & Admin</h4>
+                  <ul className="space-y-2 text-slate-400">
                     <li><Link to="/login" className="hover:text-[#1473E6] transition-colors">Sign In / Join</Link></li>
                     <li><Link to="/creator-dashboard" className="hover:text-[#1473E6] transition-colors">Digital Resume Editor</Link></li>
                     <li><Link to="/admin" className="hover:text-[#1473E6] transition-colors">Admin Verification Portal</Link></li>
@@ -86,12 +86,12 @@ function App() {
 
               </div>
 
-              <div className="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500">
-                <div>© 2026 CreatorHub Inc. Adobe Light Theme.</div>
+              <div className="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500">
+                <div>© 2026 CreatorHub Inc. All rights reserved.</div>
                 <div className="flex gap-4 mt-2 sm:mt-0">
                   <span>Privacy Policy</span>
                   <span>Terms of Service</span>
-                  <span>Multi-Currency Escrow</span>
+                  <span>INR Milestone Escrow</span>
                 </div>
               </div>
             </footer>
