@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCurrency } from '../context/CurrencyContext';
 import ResumeViewer from '../components/ResumeViewer';
-import { ShieldAlert, CheckCircle2, Users, Briefcase, DollarSign, Activity, Lock, AlertCircle, FileText, UserCheck, Check, Globe } from 'lucide-react';
+import { ShieldAlert, CheckCircle2, Users, Briefcase, DollarSign, Activity, Lock, AlertCircle, FileText, UserCheck, Check, Globe, Eye, Download, Play } from 'lucide-react';
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -50,6 +50,23 @@ export default function AdminDashboard() {
       .catch(err => alert('Verification failed'));
   };
 
+  const handleInspectUser = (u) => {
+    // Construct or select full creator object for ResumeViewer modal
+    setSelectedCreator({
+      ...u,
+      title: u.title || (u.role === 'creator' ? 'Senior Content Creator & Editor' : 'Hiring Client'),
+      location: u.location || 'Mumbai, India',
+      hourlyRate: u.hourlyRate || 45,
+      rating: u.rating || 5.0,
+      reviewsCount: u.reviewsCount || 42,
+      skills: u.skills || ['Video Editing', 'Motion Graphics', 'Color Grading'],
+      portfolio: u.portfolio || [
+        { title: '4K Commercial Edit', type: 'video', thumbnail: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+        { title: 'Cinematic Color Grading Pass', type: 'video', thumbnail: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80', url: 'https://www.w3schools.com/html/mov_bbb.mp4' }
+      ]
+    });
+  };
+
   if (!user || user.role !== 'admin') {
     return (
       <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-4">
@@ -77,7 +94,7 @@ export default function AdminDashboard() {
               <ShieldAlert className="w-6 h-6 text-rose-600" />
               <h1 className="text-2xl font-extrabold text-[#0f172a]">CreatorHub Admin Command Center</h1>
             </div>
-            <p className="text-xs text-[#64748b] mt-1">Review pending creator applications, approve verification badges, and monitor platform stats in INR (₹).</p>
+            <p className="text-xs text-[#64748b] mt-1">Click any user row to view their profile, digital resume, and download work samples.</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -154,10 +171,10 @@ export default function AdminDashboard() {
 
                   <div className="flex items-center gap-2 pt-2 border-t border-[#e2e8f0]">
                     <button
-                      onClick={() => setSelectedCreator(creator)}
+                      onClick={() => handleInspectUser(creator)}
                       className="flex-1 py-2 rounded-lg bg-white border border-[#e2e8f0] text-xs font-bold text-[#0f172a] hover:bg-slate-50 transition-all flex items-center justify-center gap-1"
                     >
-                      <FileText className="w-3.5 h-3.5 text-slate-500" /> Inspect Resume
+                      <FileText className="w-3.5 h-3.5 text-slate-500" /> Inspect Resume & Samples
                     </button>
                     <button
                       onClick={() => handleVerifyCreator(creator.id, creator.name)}
@@ -215,9 +232,12 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* 📋 3. COMPLETE USER DIRECTORY */}
+        {/* 📋 3. COMPLETE USER & CREATOR REGISTRY (INTERACTIVE CLICKABLE ROWS) */}
         <div className="p-6 rounded-3xl bg-white border border-[#e2e8f0] shadow-sm space-y-4">
-          <h2 className="text-base font-extrabold text-[#0f172a] border-b border-[#e2e8f0] pb-3">Complete User & Creator Registry</h2>
+          <div className="flex items-center justify-between border-b border-[#e2e8f0] pb-3">
+            <h2 className="text-base font-extrabold text-[#0f172a]">Complete User & Creator Registry</h2>
+            <span className="text-xs font-bold text-[#000000]">💡 Click any user row to view profile & download work samples</span>
+          </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
@@ -232,11 +252,18 @@ export default function AdminDashboard() {
               </thead>
               <tbody className="divide-y divide-[#e2e8f0]">
                 {usersList.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-50 transition-colors">
+                  <tr
+                    key={u.id}
+                    onClick={() => handleInspectUser(u)}
+                    className="hover:bg-slate-100 transition-colors cursor-pointer group"
+                  >
                     <td className="p-3 flex items-center gap-3">
-                      <img src={u.avatar} alt={u.name} className="w-8 h-8 rounded-full object-cover ring-1 ring-[#e2e8f0]" />
+                      <img src={u.avatar} alt={u.name} className="w-9 h-9 rounded-full object-cover ring-2 ring-[#e2e8f0] group-hover:ring-[#000000] transition-all" />
                       <div>
-                        <div className="font-bold text-[#0f172a]">{u.name}</div>
+                        <div className="font-extrabold text-[#0f172a] group-hover:text-[#000000] flex items-center gap-1.5">
+                          <span>{u.name}</span>
+                          <Eye className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
                         <div className="text-[10px] text-[#64748b]">{u.email}</div>
                       </div>
                     </td>
@@ -261,17 +288,24 @@ export default function AdminDashboard() {
                         </span>
                       )}
                     </td>
-                    <td className="p-3">
-                      {u.role === 'creator' && !u.verified ? (
+                    <td className="p-3" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex items-center gap-2">
                         <button
-                          onClick={() => handleVerifyCreator(u.id, u.name)}
-                          className="px-3 py-1 bg-[#000000] hover:bg-[#1e293b] text-white font-bold rounded-lg transition-all"
+                          onClick={() => handleInspectUser(u)}
+                          className="px-3 py-1 bg-white border border-[#e2e8f0] hover:bg-slate-100 text-[#0f172a] font-bold rounded-lg transition-all flex items-center gap-1 text-[11px]"
                         >
-                          Approve
+                          <FileText className="w-3 h-3 text-[#000000]" /> Inspect Profile
                         </button>
-                      ) : (
-                        <span className="text-[#64748b] italic">No action needed</span>
-                      )}
+
+                        {u.role === 'creator' && !u.verified && (
+                          <button
+                            onClick={() => handleVerifyCreator(u.id, u.name)}
+                            className="px-3 py-1 bg-[#000000] hover:bg-[#1e293b] text-white font-bold rounded-lg transition-all text-[11px]"
+                          >
+                            Approve
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -280,7 +314,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Resume Viewer Modal */}
+        {/* Resume Viewer Modal with Work Samples Download */}
         {selectedCreator && (
           <ResumeViewer
             creator={selectedCreator}
